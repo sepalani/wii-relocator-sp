@@ -1,7 +1,7 @@
 #summary How to extract imports (binary format)
 = Introduction =
 
-The imports can be extracted only through a memory dump. Why? Because they aren't in the RSO file itself, they're dynamically imported. When you launch the game and a RSO file is used, it will make links with the imports. The program has bunch of tools which can find the relocated address and resolve it, to find where in the memory the import is. The methods presented will works for imports, exports, externals and internals relocation entries even if it will be really useful only for imports and at least for externals relocation entry. The rest can be extracted directly from the file.
+The imports can be extracted only through a memory dump. Why? Because they aren't in the RSO file itself, they're dynamically imported. When you launch the game and a RSO file is used, it will make links with the imports. The program has bunch of tools which can find the relocated address and resolve it, to find where in the memory the import is. The methods presented will work for imports, exports, externals and internals relocation entries even if it will be really useful only for imports and at least for externals relocation entry. The rest can be extracted directly from the file.
 
 
 = Details =
