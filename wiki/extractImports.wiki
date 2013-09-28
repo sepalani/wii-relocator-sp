@@ -1,15 +1,53 @@
-#summary One-sentence summary of this page.
-
+#summary How to extract imports (binary format)
 = Introduction =
 
-The imports can be extracted only through a memory dump. Why? Because they aren't in the rso file itself, they're dynamically imported. When you launch the game and a rso file is used, it will make links with the imports. The program has bunch of tools which can find the relocated address and resolve it, to find where in the memory the import is. The methods presented will works for imports, exports, externals and internals relocation entries even if it will be really useful only for imports and at least for externals relocation entry. The rest can be extracted directly from the file.
+The imports can be extracted only through a memory dump. Why? Because they aren't in the RSO file itself, they're dynamically imported. When you launch the game and a RSO file is used, it will make links with the imports. The program has bunch of tools which can find the relocated address and resolve it, to find where in the memory the import is. The methods presented will works for imports, exports, externals and internals relocation entries even if it will be really useful only for imports and at least for externals relocation entry. The rest can be extracted directly from the file.
 
 
 = Details =
 
-...Coming soon...
+== Load Memory Dump ==
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+  # Launch *Wii Relocator SP*
+  # Go to *File > Open as...*
+  # Enter *RSO offset*
+  # Enter *address rectification*
+      * For a *MEM1 Dump* (_-0x80_00_00_00_)
+      * For a *MEM2 Dump* (_-0x90_00_00_00_)
+      * For a *RSO file* from the *ISO* (_0x00_)
+  # Browse to your *Memory Dump* file
+  # If it was done correctly you should see the *RSO file tree*
+
+
+== Get Relocated Address ==
+
+Optional if you know the r_offset and the relocated address. This method needs the *RSO file* to *be loaded* !
+
+  # Then go to *Tools > Resolve address...*
+  # Fill the *r_offset* text field, with :
+    * The one from any of the *relocation entry* (cf. _Tree View > Imports_)
+    * Or the one from the *externals relocation* matching this import (cf. _Relocation Tables > Externals_)
+    * *NB:* They should all give the same resolved address, if not it could be an issue of my program. 
+  # Choose the address rectification ("_From: (...)_")
+      * For a *MEM1 Dump* (*automatic*, _-0x80_00_00_00_)
+      * For a *MEM2 Dump* (*automatic*, _-0x90_00_00_00_) 
+      * For a *RSO file* from the *ISO* (*automatic/default*, _0x00_)
+      * *Custom* for an uncommon address (*manual*, _user choice_)
+  # Press the "*Get relocated address*" button
+  # Usually it will fill the *relocated address* text field automatically.
+  
+
+== Resolve Relocated Address ==
+
+This part can work even if the file isn't loaded. It only needs the *r_offset* and *relocated address* text fields to be filled correctly.
+  # Fill the *relocated address* text field (_if it wasn't done_)
+  # Choose the *relocation type* (cf. _where you found the *r_offset*_)
+  # Press the "*Resolve*" button
+  # It should give you the *resolved address*
+
+
+== Extract Imports ==
+
+If the previous part was done correctly (i.e. shows a *resolved address*) you can choose the extraction format, *binary* (_for Assembly code_) or *object* (_for an object_). I assume there are others format but I didn't figure out those yet. Of course you should use *binary*, if you want to extract *imports*, *exports*, *assembly entries*.
+  # Finally, press the "*Extract*" button
+  # And browse to your output file
