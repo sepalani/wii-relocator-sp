@@ -21,7 +21,7 @@ The imports can be extracted only through a memory dump. Why? Because they aren'
 
 == Get Relocated Address ==
 
-Optional if you know the r_offset and the relocated address. This method needs the *RSO file* to *be loaded* !
+Optional if you know the *r_offset* and the *relocated address*. This method needs the *RSO file* to *be loaded* !
 
   # Then go to *Tools > Resolve address...*
   # Fill the *r_offset* text field, with :
