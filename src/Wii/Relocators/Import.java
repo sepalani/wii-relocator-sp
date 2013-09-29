@@ -12,7 +12,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with RsoTool.  If not, see <http://www.gnu.org/licenses/>.
+    along with Wii Relocator SP.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 //----------------------//
@@ -22,6 +22,7 @@
 package Wii.Relocators;
 
 import Wii.IO;
+import Wii.PPC.*;
 import java.io.*;
 import java.util.*;
 
@@ -80,6 +81,65 @@ public class Import extends RelocatedData {
         return ret;
     }
     
+    public void extractFromFile(File in, File out, long from) throws IOException {
+        extractFromFile(in, out, from, 0);
+    }
+    
+    public void extractFromFile(File in, File out, long from, int relId) throws IOException {
+        //  Get relocated address
+        long address    = PowerPC.getRelocatedAddressFrom(r_offset[relId], in, from);
+        System.out.println(String.format("Relocated add: %08X", address));
+        
+        //  Resolve address
+        long offset     = PowerPC.resolveAddressFrom(
+                address, (int) relocationType[relId], r_offset[relId], from);
+        System.out.println(String.format("Resolved add: %08X", offset));
+        
+        //  Partial address relocation
+        if (relocationType[relId] == 0x04 || relocationType[relId] == 0x05
+                || relocationType[relId] == 0x06) {
+            labelFind:
+            for (int i = 0; i < relocationType[relId]; i++) {
+                long r_offset_p = r_offset[i];
+                int r_type_p    = (int) relocationType[i];
+                long address_p  = PowerPC.getRelocatedAddressFrom(r_offset_p, in, from);
+                
+                switch ((int) relocationType[relId]) {
+                    case 0x04:
+                        if (r_type_p == 0x05 || r_type_p == 0x06) {
+                            offset |= PowerPC.resolveAddressFrom(
+                                    address_p, r_type_p, r_offset_p, from) << 16;
+                            offset -= from;
+                            break labelFind;
+                        }
+                        break;
+                        
+                    case 0x05: case 0x06:
+                        if (r_type_p == 0x04) {
+                            offset <<= 16;
+                            offset |= PowerPC.resolveAddressFrom(
+                                    address_p, r_type_p, r_offset_p, from);
+                            offset -= from;
+                            break labelFind;
+                        }
+                        break;
+                }
+            } 
+        }
+        System.out.println(String.format("Resolved add P2: %08X", offset));
+        
+        //  Extract binary
+        int[] buff = PowerPC.extractBinary(in, offset);
+        FileOutputStream fos        = new FileOutputStream(out);
+        BufferedOutputStream bos    = new BufferedOutputStream(fos);
+        for (int i = 0; i < buff.length; i++) {
+            bos.write(buff[i]);
+        }
+        bos.close();
+        fos.close();
+    }
+    
+    //--- Resolving method
     public void getName(long nameOffset, File in) throws IOException {
         IO file = new IO(in, "r");
         file.seek(this.nameOffset + nameOffset);

@@ -12,7 +12,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with RsoTool.  If not, see <http://www.gnu.org/licenses/>.
+    along with Wii Relocator SP.  If not, see <http://www.gnu.org/licenses/>.
  */
 package UI;
 
@@ -102,7 +102,6 @@ public class easyUI {
         };
     }
     
-    
     //--- Easy MessageBox
     public final static int MBIcon_PLAIN        = JOptionPane.PLAIN_MESSAGE;
     public final static int MBIcon_INFORMATION  = JOptionPane.INFORMATION_MESSAGE;
@@ -126,4 +125,50 @@ public class easyUI {
         return JOptionPane.showInputDialog(frame, mess, title, icon);
     }
     
+    //--- Parser
+    public final static String BIN_PREFIX   = "0b";
+    public final static String OCT_PREFIX   = "0o";
+    public final static String HEX_PREFIX   = "0x";
+    
+    public static String[] parseStringRadix(String str) {
+        //  Handle " "/"_"
+        str = str.replaceAll(" ", "");
+        str = str.replaceAll("_", "");
+        
+        //  Handle sign
+        int seek = 0;
+        String radix, sign = "";
+        if (str.charAt(0) == '-') {
+            sign = "-";
+            seek += 1;
+        }
+        
+        //  Handle radix
+        radix = str.substring(seek, seek+2);
+        switch (radix) {
+            case BIN_PREFIX:  
+                return new String[] { sign + str.substring(seek+2), "2"  };
+            case OCT_PREFIX:  
+                return new String[] { sign + str.substring(seek+2), "8"  };
+            case HEX_PREFIX:  
+                return new String[] { sign + str.substring(seek+2), "16" };
+            default:  
+                return new String[] { sign + str,                   "10" };
+        }
+    }
+    
+    public static short parseShort(String str) {
+        String[] get = parseStringRadix(str);
+        return Short.parseShort(get[0], Integer.parseInt(get[1]));
+    }
+    
+    public static int parseInteger(String str) {
+        String[] get = parseStringRadix(str);
+        return Integer.parseInt(get[0], Integer.parseInt(get[1]));
+    }
+    
+    public static long parseLong(String str) {
+        String[] get = parseStringRadix(str);
+        return Long.parseLong(get[0], Integer.parseInt(get[1]));
+    }
 }
