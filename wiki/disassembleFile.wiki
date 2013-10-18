@@ -1,0 +1,17 @@
+#summary How to disassemble Wii ASM files
+
+= Introduction =
+
+Some files can contain partially or are assembly instructions. That means they're sent and executed by the processor. In the case of the Wii it's a PowerPC architecture, we will use a tool named objdump to disassemble this kind of file.
+
+Be sure to have a objdump version that supports PPC architecture. By the way keep in mind that you need to know what part of the file contains or not assembly instructions. Then extract only the asm part and give it to objdump, if you disassemble something that is not asm, you'll have some strange results and may mislead you.
+
+The RSO files contains portions of asm which is in the "Assembly section", but others sections can have asm as well depending to what there are in it. The more efficient way to disassemble them properly is to extract the functions and not the section itself because it's like searching blindfolded. When the functions (i.e. Exports/Imports) you want to disassemble are extracted you can give them to objdump.
+
+
+= Details =
+
+The only thing you need to do is type the code bellow in your terminal and replace "*$FILE*" with the file you want to disassemble.
+{{{
+objdump -mpowerpc:750 -M750cl -D -b binary -EB $FILE
+}}}
