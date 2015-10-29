@@ -12,13 +12,14 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with RsoTool.  If not, see <http://www.gnu.org/licenses/>.
+    along with Wii Relocator SP.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package UI;
 
 import Wii.PPC.PowerPC;
 import Wii.Relocators.*;
+import Wii.IO;
 import java.io.*;
 
 /**
@@ -45,6 +46,15 @@ public class GuiB1 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFrameToolsAddress = new javax.swing.JFrame();
+        jComboBoxToolsAddress = new javax.swing.JComboBox();
+        jTextFieldToolsAddress = new javax.swing.JTextField();
+        jLabelToolsAddress = new javax.swing.JLabel();
+        jButtonToolsAddressResolve = new javax.swing.JButton();
+        jLabelToolsAddressDef = new javax.swing.JLabel();
+        jLabelToolsAddressRoffset = new javax.swing.JLabel();
+        jTextFieldToolsAddressRoffset = new javax.swing.JTextField();
+        jButtonToolsAddressGet = new javax.swing.JButton();
         jTabbedPaneMain = new javax.swing.JTabbedPane();
         jScrollPaneFile = new javax.swing.JScrollPane();
         jSplitPaneFile = new javax.swing.JSplitPane();
@@ -80,9 +90,82 @@ public class GuiB1 extends javax.swing.JFrame {
         jMenuTools = new javax.swing.JMenu();
         jMenuItemToolsExtractBinary = new javax.swing.JMenuItem();
         jMenuItemToolsExtractObject = new javax.swing.JMenuItem();
+        jMenuItemToolsResolveAddress = new javax.swing.JMenuItem();
         jMenuQ = new javax.swing.JMenu();
         jMenuItemQHelp = new javax.swing.JMenuItem();
         jMenuItemQAbout = new javax.swing.JMenuItem();
+
+        jFrameToolsAddress.setTitle("Resolve address");
+
+        jComboBoxToolsAddress.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "R_PPC_NONE (0x00)", "R_PPC_ADDR32  (0x01)", "*R_PPC_ADDR24  (0x02)", "R_PPC_ADDR16  (0x03)", "R_PPC_ADDR16_LO (0x04)", "R_PPC_ADDR16_HI  (0x05)", "R_PPC_ADDR16_HA (0x06)", "*R_PPC_ADDR14  (0x07)", "*R_PPC_ADDR14  (0x08)", "*R_PPC_ADDR14  (0x09)", "R_PPC_REL24 (0x0A)", "*R_PPC_REL14 (0x0B)", "*R_PPC_REL14 (0x0C)", "*R_PPC_REL14 (0x0D)" }));
+        jComboBoxToolsAddress.setToolTipText("");
+
+        jTextFieldToolsAddress.setText("Enter relocated address...");
+
+        jLabelToolsAddress.setText("Address:  0xXXXXXXXX");
+
+        jButtonToolsAddressResolve.setText("Resolve");
+        jButtonToolsAddressResolve.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonToolsAddressResolveActionPerformed(evt);
+            }
+        });
+
+        jLabelToolsAddressDef.setText("*:  not supported relocation");
+
+        jLabelToolsAddressRoffset.setText("r_offset:  ");
+
+        jTextFieldToolsAddressRoffset.setText("Enter hex string...");
+
+        jButtonToolsAddressGet.setText("Get symbol address");
+        jButtonToolsAddressGet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonToolsAddressGetActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jFrameToolsAddressLayout = new javax.swing.GroupLayout(jFrameToolsAddress.getContentPane());
+        jFrameToolsAddress.getContentPane().setLayout(jFrameToolsAddressLayout);
+        jFrameToolsAddressLayout.setHorizontalGroup(
+            jFrameToolsAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameToolsAddressLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jFrameToolsAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabelToolsAddress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jFrameToolsAddressLayout.createSequentialGroup()
+                        .addComponent(jLabelToolsAddressRoffset)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldToolsAddressRoffset))
+                    .addComponent(jButtonToolsAddressGet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTextFieldToolsAddress)
+                    .addComponent(jComboBoxToolsAddress, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jFrameToolsAddressLayout.createSequentialGroup()
+                        .addComponent(jLabelToolsAddressDef)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jButtonToolsAddressResolve, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jFrameToolsAddressLayout.setVerticalGroup(
+            jFrameToolsAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jFrameToolsAddressLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jFrameToolsAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelToolsAddressRoffset)
+                    .addComponent(jTextFieldToolsAddressRoffset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonToolsAddressGet)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldToolsAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBoxToolsAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonToolsAddressResolve)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addComponent(jLabelToolsAddressDef)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelToolsAddress)
+                .addContainerGap())
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Wii Relocator SP");
@@ -286,6 +369,14 @@ public class GuiB1 extends javax.swing.JFrame {
         });
         jMenuTools.add(jMenuItemToolsExtractObject);
 
+        jMenuItemToolsResolveAddress.setText("Resolve address...");
+        jMenuItemToolsResolveAddress.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemToolsResolveAddressActionPerformed(evt);
+            }
+        });
+        jMenuTools.add(jMenuItemToolsResolveAddress);
+
         jMenuBar1.add(jMenuTools);
 
         jMenuQ.setText("?");
@@ -323,7 +414,7 @@ public class GuiB1 extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPaneMain, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
+                .addComponent(jTabbedPaneMain, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -481,7 +572,7 @@ public class GuiB1 extends javax.swing.JFrame {
 
     private void jMenuItemQAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQAboutActionPerformed
         eUI.messageBox(this,String.format(
-                            "    Wii Relocator SP v0.1 %n %n"+
+                            "    Wii Relocator SP v0.2 %n %n"+
                             "    Copyright © 2013  SPLN (sepalani) %n"+
                             "    This program is free software: you can redistribute it and/or modify%n" +
                             "    it under the terms of the GNU General Public License as published by%n" +
@@ -591,6 +682,37 @@ public class GuiB1 extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }//GEN-LAST:event_jMenuItemToolsExtractObjectActionPerformed
+
+    private void jMenuItemToolsResolveAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemToolsResolveAddressActionPerformed
+        // TODO add your handling code here:
+        jFrameToolsAddress.setVisible(true);
+    }//GEN-LAST:event_jMenuItemToolsResolveAddressActionPerformed
+
+    private void jButtonToolsAddressResolveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonToolsAddressResolveActionPerformed
+        // TODO add your handling code here:
+        int index = jComboBoxToolsAddress.getSelectedIndex();
+        long r_offset = Long.parseLong(jTextFieldToolsAddressRoffset.getText(),16);
+        long symb = Long.parseLong(jTextFieldToolsAddress.getText(),16);
+        long add = PowerPC.resolveAddress(symb, index, r_offset);
+        jLabelToolsAddress.setText(String.format("Address:  0x%08X", add));
+    }//GEN-LAST:event_jButtonToolsAddressResolveActionPerformed
+
+    private void jButtonToolsAddressGetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonToolsAddressGetActionPerformed
+        // TODO add your handling code here:
+        if (!isLoaded) {
+            eUI.messageBoxExt(this, "File isn't loaded!", "Failed to read address", easyUI.MBIcon_ERROR);
+            return;
+        }
+        long offset = Long.parseLong(jTextFieldToolsAddressRoffset.getText(),16);
+        try {
+            IO file = new IO(relFile.fileLocation,"r");
+            file.seek(offset);
+            offset = file.readUint32();
+            jTextFieldToolsAddress.setText(String.format("%08X", offset));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButtonToolsAddressGetActionPerformed
     //</editor-fold>
     
     
@@ -625,8 +747,15 @@ public class GuiB1 extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonToolsAddressGet;
+    private javax.swing.JButton jButtonToolsAddressResolve;
+    private javax.swing.JComboBox jComboBoxToolsAddress;
+    private javax.swing.JFrame jFrameToolsAddress;
     private javax.swing.JLabel jLabelFileProperties;
     private javax.swing.JLabel jLabelRelocationProperties;
+    private javax.swing.JLabel jLabelToolsAddress;
+    private javax.swing.JLabel jLabelToolsAddressDef;
+    private javax.swing.JLabel jLabelToolsAddressRoffset;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuFile;
     private javax.swing.JMenu jMenuFileNew;
@@ -643,6 +772,7 @@ public class GuiB1 extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemQHelp;
     private javax.swing.JMenuItem jMenuItemToolsExtractBinary;
     private javax.swing.JMenuItem jMenuItemToolsExtractObject;
+    private javax.swing.JMenuItem jMenuItemToolsResolveAddress;
     private javax.swing.JMenu jMenuQ;
     private javax.swing.JMenu jMenuTools;
     private javax.swing.JScrollPane jScrollPaneExternalsRelocation;
@@ -663,6 +793,8 @@ public class GuiB1 extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPaneRelocationTable;
     private javax.swing.JTable jTableExternalsRelocation;
     private javax.swing.JTable jTableInternalsRelocation;
+    private javax.swing.JTextField jTextFieldToolsAddress;
+    private javax.swing.JTextField jTextFieldToolsAddressRoffset;
     // End of variables declaration//GEN-END:variables
     // Variables declaration
     private easyUI          eUI;

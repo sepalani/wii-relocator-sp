@@ -12,12 +12,13 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with RsoTool.  If not, see <http://www.gnu.org/licenses/>.
+    along with Wii Relocator SP.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package Wii.PPC;
 
 import java.io.*;
+import java.math.*;
 import java.util.*;
 
 /**
@@ -30,16 +31,44 @@ public class PowerPC {
         return resolveAddress(add, relocationType, 0);
     }
     
-    public static long resolveAddress(long add, int relocationType, long dec) {
-        add = (add + dec > 0)   ? add + dec
-                                : 0;
+    public static long resolveAddress(long add, int relocationType, long r_offset) {
+        /*add = (add + dec > 0)   ? add + dec
+                                : 0;*/
         long ret;
+        
         switch (relocationType) {
-            case 0x01:  
-                //;break;
-            default:  
+            default:
+            case Assembly.R_PPC_ADDR32:     /*0x01*/
+            //--- Unsupported yet:
+            case Assembly.R_PPC_ADDR24:     /*0x02*/
+            case Assembly.R_PPC_ADDR14:     /*0x07~9*/
+            case 0x08:  case 0x09:
+            case Assembly.R_PPC_REL14:      /*0x0B~D*/
+            case 0x0C:  case 0x0D:  
                 ret = add;
+                break;
+                
+            case Assembly.R_PPC_ADDR16:     /*0x03*/
+            case Assembly.R_PPC_ADDR16_LO:  /*0x04*/
+            case Assembly.R_PPC_ADDR16_HI:  /*0x05*/
+                ret = (add >> 16) & 0xFF_FF;
+                break;
+                
+            case Assembly.R_PPC_ADDR16_HA:  /*0x06*/
+                ret = ((add - 0x8000) >> 16) & 0xFF_FF;
+                break;
+                
+            case Assembly.R_PPC_REL24:      /*0x0A*/
+                ret = add & 0xFF_FF_FF;
+                if (ret >= 0x80_00_00) {
+                    //--- Signed
+                    ret -= 0x1_00_00_01;
+                } 
+                ret += r_offset;
+                break;
+                
         }
+        
         return ret;
     }
     
@@ -47,14 +76,29 @@ public class PowerPC {
         return resolveMem1Address(add, relocationType, 0);
     }
     
-    public static long resolveMem1Address(long add, int relocationType, long dec) {
-        add = (add + dec > 0)   ? add + dec
-                                : 0;
+    public static long resolveMem1Address(long add, int relocationType, long r_offset) {
+        /*add = (add + dec > 0)   ? add + dec
+                                : 0;*/
         if (add < MEM1_OFFSET || add > (MEM1_OFFSET + MEM1_SIZE)) {
             System.out.println("Address isn't from MEM1!");
             return -1;
         } else {
-            return resolveAddress(add - MEM1_OFFSET, relocationType);
+            return resolveAddress(add - MEM1_OFFSET, relocationType, r_offset);
+        }
+    }
+    
+    public static long resolveMem2Address(long add, int relocationType) {
+        return resolveMem2Address(add, relocationType, 0);
+    }
+    
+    public static long resolveMem2Address(long add, int relocationType, long r_offset) {
+        /*add = (add + dec > 0)   ? add + dec
+                                : 0;*/
+        if (add < MEM2_OFFSET || add > (MEM2_OFFSET + MEM2_SIZE)) {
+            System.out.println("Address isn't from MEM1!");
+            return -1;
+        } else {
+            return resolveAddress(add - MEM2_OFFSET, relocationType, r_offset);
         }
     }
     

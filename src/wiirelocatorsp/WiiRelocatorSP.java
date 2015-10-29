@@ -1,5 +1,3 @@
-package wiirelocatorsp;
-
 /** Copyright (C) 2013  SPLN (sepalani)
     This file is part of Wii Relocator SP.
 
@@ -14,8 +12,10 @@ package wiirelocatorsp;
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with RsoTool.  If not, see <http://www.gnu.org/licenses/>.
+    along with Wii Relocator SP.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+package wiirelocatorsp;
 
 import java.io.*;
 import Wii.IO;
@@ -39,6 +39,19 @@ public class WiiRelocatorSP {
         REL relDebug = new REL(debugFileRel);
         String[] parse;
         */
+        //--- strcpy
+        /*long add = Long.parseLong("4BAE0CC1",16);
+        long r_offset = Long.parseLong("8097EF14", 16);
+        String str = String.format("%08X", Wii.PPC.
+                PowerPC.resolveAddress(add, 0x0A, r_offset));
+        System.out.println(str);
+        
+        add = Long.parseLong("4BAE0CD5",16);
+        r_offset = Long.parseLong("8097EF00", 16);
+        str = String.format("%08X", Wii.PPC.
+                PowerPC.resolveAddress(add, 0x0A, r_offset));
+        System.out.println(str);*/
+        
         GuiB1.main(args);
         /*
         try {
