@@ -17,6 +17,7 @@
 
 package UI;
 
+// import Wii.PPC.PowerPC;
 import Wii.Relocators.*;
 
 import java.io.*;
@@ -86,17 +87,39 @@ public class FileTree extends JTree implements TreeSelectionListener, MouseListe
         popupSection.add(itemSectionExtractAll);
         popupSection.add(itemSectionResolve);
         
-        // Exports
+        // Export
         popupExport             = new JPopupMenu("21");
         popupExportFromFile     = new JMenu("Extract from file");
         popupExportFromSection  = new JMenu("Extract from section");
         popupExport.add(popupExportFromSection);
         popupExport.add(popupExportFromFile);
         
-        // Imports
+        // Exports
+        popupExports            = new JPopupMenu("18");
+        itemExportsExtractAll   = new JMenuItem("Extract All...");
+        itemExportsExtractAll.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    jMenuItemExportsExtractAll();
+                }
+        });
+        popupExports.add(itemExportsExtractAll);
+        
+        // Import
         popupImport             = new JPopupMenu("23");
         popupImportFromFile     = new JMenu("Extract from file");
         popupImport.add(popupImportFromFile);
+        
+        // Imports
+        popupImports            = new JPopupMenu("18");
+        itemImportsExtractAll   = new JMenuItem("Extract All...");
+        itemImportsExtractAll.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    jMenuItemImportsExtractAll();
+                }
+        });
+        popupImports.add(itemImportsExtractAll);
     }
     
     public void showMenu(MouseEvent e) {
@@ -109,6 +132,18 @@ public class FileTree extends JTree implements TreeSelectionListener, MouseListe
             popup = exportMenu();
         } else if (node.getUserObject().getClass() == Import.class) {
             popup = importMenu();
+        } else if (node.getUserObject().getClass() == String.class) {
+            String str = (String) node.getUserObject();
+            switch (str) {
+                case "Exports":
+                    popup = importsMenu();
+                    break;
+                case "Imports":
+                    popup = exportsMenu();
+                    break;
+                default:
+                    return;
+            }
         } else {
             return;
         }
@@ -119,15 +154,15 @@ public class FileTree extends JTree implements TreeSelectionListener, MouseListe
     
     //--- Menu Item
     
-    //<editor-fold defaultstate="collapsed" desc="[TREE] Popup Section      - Items Event">
+    //<editor-fold defaultstate="collapsed" desc="[TREE] Popup Section          - Items Event">
     public void jMenuItemSectionExtract() {
         //--- Get File
-        File out = eUI.getSaveFilename(new String[] {"Binary file"}, new String[] {".bin"});
+        File out = easyUI.getSaveFilename(new String[] {"Binary file"}, new String[] {".bin"});
         if (out == null) {
-            eUI.messageBoxExt(this, "File error!", "Failed to save file", easyUI.MBIcon_ERROR);
+            easyUI.messageBoxExt(this, "File error!", "Failed to save file", easyUI.MBIcon_ERROR);
             return;
         } else if (out.exists()) {
-            eUI.messageBoxExt(this, "File already exists!", "Failed to save file", easyUI.MBIcon_INFORMATION);
+            easyUI.messageBoxExt(this, "File already exists!", "Failed to save file", easyUI.MBIcon_INFORMATION);
             return;
         }
         
@@ -139,7 +174,7 @@ public class FileTree extends JTree implements TreeSelectionListener, MouseListe
         } catch (IOException e) {
             e.printStackTrace();
         }
-        eUI.messageBoxExt(this, "Section extracted!", "Done", easyUI.MBIcon_INFORMATION);
+        easyUI.messageBoxExt(this, "Section extracted!", "Done", easyUI.MBIcon_INFORMATION);
     }
     
     public void jMenuItemSectionExtractAll() {
@@ -193,7 +228,7 @@ public class FileTree extends JTree implements TreeSelectionListener, MouseListe
         } catch (IOException e) {
             e.printStackTrace();
         }
-        eUI.messageBoxExt(this, "Data extracted successfuly!", "Done", easyUI.MBIcon_INFORMATION);
+        easyUI.messageBoxExt(this, "Data extracted successfuly!", "Done", easyUI.MBIcon_INFORMATION);
     }
     
     public void jMenuItemSectionResolve() {
@@ -211,29 +246,87 @@ public class FileTree extends JTree implements TreeSelectionListener, MouseListe
             }
         }
         if (count == 0) node.add(new DefaultMutableTreeNode("<null>"));
-        easyUI.messageBoxExt(this, "Resolved: "+count, "Resolve Section", eUI.MBIcon_INFORMATION);
+        easyUI.messageBoxExt(this, "Resolved: "+count, "Resolve Section", easyUI.MBIcon_INFORMATION);
     }
     //</editor-fold>
     
-    //<editor-fold defaultstate="collapsed" desc="[TREE] Popup Import       - Items Event">
+    //<editor-fold defaultstate="collapsed" desc="[TREE] Popup Import/Export    - Items Event">
     public void jMenuItemImportExtractFromFile(int relId) {
+        System.out.println("--- Import Extract From File ---");
+        long dec, from;
+        //  Get address rectification
+        try {
+            dec = easyUI.parseLong(easyUI.getString(this, "Address rectification", "0x00"));
+            from = -dec;
+        } catch (NumberFormatException | NullPointerException e) {
+            easyUI.messageBoxExt(this, "Isn't a valide number!", "Input error", easyUI.MBIcon_ERROR);
+            e.printStackTrace();
+            return;
+        }
         
+        //  Get File
+        File out = easyUI.getSaveFilename(new String[] {"Binary file"}, new String[] {".bin"});
+            if (out == null) {
+                easyUI.messageBoxExt(this, "File error!", "Failed to save file", easyUI.MBIcon_ERROR);
+                return;
+            } else if (out.exists()) {
+                easyUI.messageBoxExt(this, "File already exists!", "Failed to save file", easyUI.MBIcon_INFORMATION);
+                return;
+            }
+        
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) this.getLastSelectedPathComponent();
+        Import imp  = (Import) node.getUserObject();
+        try {
+            imp.extractFromFile(relFile.fileLocation, out, from, relId);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        easyUI.messageBoxExt(this, "Import extracted successfuly!", "Done", easyUI.MBIcon_INFORMATION);
     }
     
     public void jMenuItemExportExtractFromFile(int relId) {
+        System.out.println("--- Export Extract From File ---");
+        long dec, from;
+        //  Get address rectification
+        try {
+            dec = easyUI.parseLong(easyUI.getString(this, "Address rectification", "0x00"));
+            from = -dec;
+        } catch (NumberFormatException | NullPointerException e) {
+            easyUI.messageBoxExt(this, "Isn't a valide number!", "Input error", easyUI.MBIcon_ERROR);
+            e.printStackTrace();
+            return;
+        }
         
+        //  Get File
+        File out = easyUI.getSaveFilename(new String[] {"Binary file"}, new String[] {".bin"});
+            if (out == null) {
+                easyUI.messageBoxExt(this, "File error!", "Failed to save file", easyUI.MBIcon_ERROR);
+                return;
+            } else if (out.exists()) {
+                easyUI.messageBoxExt(this, "File already exists!", "Failed to save file", easyUI.MBIcon_INFORMATION);
+                return;
+            }
+        
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) this.getLastSelectedPathComponent();
+        Export exp  = (Export) node.getUserObject();
+        try {
+            exp.extractFromFile(relFile.fileLocation, out, from, relId);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        easyUI.messageBoxExt(this, "Export extracted successfuly!", "Done", easyUI.MBIcon_INFORMATION);
     }
-    //</editor-fold>
     
-    //<editor-fold defaultstate="collapsed" desc="[TREE] Popup Export       - Items Event">
     public void jMenuItemExportExtractFromSection() {
         //--- Get File
-        File out = eUI.getSaveFilename(new String[] {"Binary file"}, new String[] {".bin"});
+        File out = easyUI.getSaveFilename(new String[] {"Binary file"}, new String[] {".bin"});
         if (out == null) {
-            eUI.messageBoxExt(this, "File error!", "Failed to save file", easyUI.MBIcon_ERROR);
+            easyUI.messageBoxExt(this, "File error!", "Failed to save file", easyUI.MBIcon_ERROR);
             return;
         } else if (out.exists()) {
-            eUI.messageBoxExt(this, "File already exists!", "Failed to save file", easyUI.MBIcon_INFORMATION);
+            easyUI.messageBoxExt(this, "File already exists!", "Failed to save file", easyUI.MBIcon_INFORMATION);
             return;
         }
         
@@ -245,6 +338,141 @@ public class FileTree extends JTree implements TreeSelectionListener, MouseListe
         } catch (IOException e) {
             e.printStackTrace();
         }
+        easyUI.messageBoxExt(this, "Export extracted successfuly!", "Done", easyUI.MBIcon_INFORMATION);
+    }
+    //</editor-fold>
+    
+    //<editor-fold defaultstate="collapsed" desc="[TREE] Popup Imports/Exports  - Items Event">
+    public void jMenuItemImportsExtractAll() {
+        long dec, from;
+        //  Get address rectification
+        try {
+            dec = easyUI.parseLong(easyUI.getString(this, "Address rectification", "0x00"));
+            from = -dec;
+        } catch (NumberFormatException | NullPointerException e) {
+            easyUI.messageBoxExt(this, "Isn't a valide number!", "Input error", easyUI.MBIcon_ERROR);
+            e.printStackTrace();
+            return;
+        }
+        
+        //  Get directory
+        File dir = easyUI.getDirectory();
+        if (!dir.exists() || !dir.isDirectory()) {
+            easyUI.messageBoxExt(this, "Can't access folder!", "Folder error", easyUI.MBIcon_ERROR);
+            return;
+        }
+        String path = dir.getAbsolutePath() + File.separator;
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) this.getLastSelectedPathComponent();
+        DefaultMutableTreeNode[] leaf = new DefaultMutableTreeNode[node.getLeafCount()];
+        int count = node.getChildCount();
+        for (int i = 0; i < count; i++) {
+            if (i == 0) {
+                leaf[i] = (DefaultMutableTreeNode) node.getFirstLeaf();
+                System.out.println(leaf[0].getUserObject().toString());
+                node = leaf[0];
+            } else {
+                leaf[i] = node.getNextSibling();
+                node = leaf[i];
+                // System.out.println("I == "+i);
+                System.out.println(leaf[i].getUserObject().toString());
+            }   
+        }
+        
+        Object nodeInfo = leaf[0].getUserObject();
+        String errList = "%n Failed:  %n";
+        if (nodeInfo.getClass() == Import.class) {
+            for (int i = 0; i < leaf.length; i++) {
+                Import imp  = (Import) leaf[i].getUserObject();
+                String name = imp.toString();
+                File out    = new File(path+name+".bin");
+                for (int j = 1; out.exists(); j++) {
+                    out = new File(path+name+j+".bin");
+                }
+                System.out.println("---" + imp.toString());
+                
+                try {
+                    imp.extractFromFile(relFile.fileLocation, out, from);
+                } catch (java.lang.OutOfMemoryError | IOException e) {
+                    System.out.println("|!| FAIL |!|");
+                    errList += " - " + imp.toString() + " %n";
+                    e.printStackTrace();
+                }
+                System.out.println("Done!");
+            }
+        } else {
+            System.out.println("Isn't import !");
+        }
+        
+        if (!errList.equals("%n Failed:  %n")) {
+            easyUI.messageBoxExt(this, String.format(errList), "Error", easyUI.MBIcon_ERROR);
+        }
+        easyUI.messageBoxExt(this, "Data extracted successfuly!", "Done", easyUI.MBIcon_INFORMATION);
+    }
+    
+    public void jMenuItemExportsExtractAll() {
+        long dec, from;
+        //  Get address rectification
+        try {
+            dec = easyUI.parseLong(easyUI.getString(this, "Address rectification", "0x00"));
+            from = -dec;
+        } catch (NumberFormatException | NullPointerException e) {
+            easyUI.messageBoxExt(this, "Isn't a valide number!", "Input error", easyUI.MBIcon_ERROR);
+            e.printStackTrace();
+            return;
+        }
+        
+        //  Get directory
+        File dir = easyUI.getDirectory();
+        if (!dir.exists() || !dir.isDirectory()) {
+            easyUI.messageBoxExt(this, "Can't access folder!", "Folder error", easyUI.MBIcon_ERROR);
+            return;
+        }
+        String path = dir.getAbsolutePath() + File.separator;
+        DefaultMutableTreeNode node = (DefaultMutableTreeNode) this.getLastSelectedPathComponent();
+        DefaultMutableTreeNode[] leaf = new DefaultMutableTreeNode[node.getLeafCount()];
+        int count = node.getChildCount();
+        for (int i = 0; i < count; i++) {
+            if (i == 0) {
+                leaf[i] = (DefaultMutableTreeNode) node.getFirstLeaf();
+                System.out.println(leaf[0].getUserObject().toString());
+                node = leaf[0];
+            } else {
+                leaf[i] = node.getNextSibling();
+                node = leaf[i];
+                // System.out.println("I == "+i);
+                System.out.println(leaf[i].getUserObject().toString());
+            }   
+        }
+        
+        Object nodeInfo = leaf[0].getUserObject();
+        String errList = "%n Failed:  %n";
+        if (nodeInfo.getClass() == Export.class) {
+            for (int i = 0; i < leaf.length; i++) {
+                Export exp  = (Export) leaf[i].getUserObject();
+                String name = exp.toString();
+                File out    = new File(path+name+".bin");
+                for (int j = 1; out.exists(); j++) {
+                    out = new File(path+name+j+".bin");
+                }
+                System.out.println("---" + exp.toString());
+                
+                try {
+                    exp.extractFromFile(relFile.fileLocation, out, from);
+                } catch (java.lang.OutOfMemoryError | IOException e) {
+                    System.out.println("|!| FAIL |!|");
+                    errList += " - " + exp.toString() + " %n";
+                    e.printStackTrace();
+                }
+                System.out.println("Done!");
+            }
+        } else {
+            System.out.println("Isn't import !");
+        }
+        
+        if (!errList.equals("%n Failed:  %n")) {
+            easyUI.messageBoxExt(this, String.format(errList), "Error", easyUI.MBIcon_ERROR);
+        }
+        easyUI.messageBoxExt(this, "Data extracted successfuly!", "Done", easyUI.MBIcon_INFORMATION);
     }
     //</editor-fold>
     
@@ -259,6 +487,10 @@ public class FileTree extends JTree implements TreeSelectionListener, MouseListe
             itemSectionExtractAll.setEnabled(true);
         }
         return popupSection;
+    }
+    
+    private JPopupMenu exportsMenu() {
+        return popupExports;
     }
     
     private JPopupMenu exportMenu() {
@@ -280,18 +512,22 @@ public class FileTree extends JTree implements TreeSelectionListener, MouseListe
             String strRel = "Relocation N°"+i;
             
             JMenuItem item1 = new JMenuItem(strRel);
-            tmp_i = i;
+            final int loop_i = new Integer(i);
             item1.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    jMenuItemExportExtractFromFile(tmp_i);
+                    jMenuItemExportExtractFromFile(loop_i);
                 }
             });
             
             popupExportFromFile.add(item1);
-            popupExportFromFile.setEnabled(false);
+            //popupExportFromFile.setEnabled(false);
         }
         return popupExport;
+    }
+    
+    private JPopupMenu importsMenu() {
+        return popupImports;
     }
     
     private JPopupMenu importMenu() {
@@ -302,16 +538,16 @@ public class FileTree extends JTree implements TreeSelectionListener, MouseListe
             String strRel = "Relocation N°"+i;
             
             JMenuItem item1 = new JMenuItem(strRel);
-            tmp_i = i;
+            final int loop_i = new Integer(i);
             item1.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    jMenuItemImportExtractFromFile(tmp_i);
+                    jMenuItemImportExtractFromFile(loop_i);
                 }
             });
             
             popupImportFromFile.add(item1);
-            popupImportFromFile.setEnabled(false);
+            //popupImportFromFile.setEnabled(false);
         }
         return popupImport;
     }
@@ -448,13 +684,13 @@ public class FileTree extends JTree implements TreeSelectionListener, MouseListe
     //</editor-fold>
     
     //--- Variables declaration
-    int tmp_i, tmp_j, tmp_k;
     Relocator relFile;
     DefaultMutableTreeNode root, sectionsNode, exportsNode, importsNode;
     JLabel properties;
-    JPopupMenu popupSection, popupExport, popupImport;
+    JPopupMenu popupSection, popupExport, popupExports, popupImport, popupImports;
     JMenu popupExportFromFile, popupExportFromSection, popupImportFromFile;
-    JMenuItem itemSectionExtract, itemSectionExtractAll, itemSectionResolve;
+    JMenuItem itemSectionExtract, itemSectionExtractAll, itemSectionResolve,
+            itemExportsExtractAll, itemImportsExtractAll;
     easyUI eUI = new easyUI();
     
 }

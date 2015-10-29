@@ -18,7 +18,7 @@
 package UI;
 
 import java.io.*;
-import Wii.IO;
+// import Wii.IO;
 import Wii.PPC.PowerPC;
 import Wii.Relocators.*;
 
@@ -137,7 +137,7 @@ public class RelocationTree extends JTree implements TreeSelectionListener, Mous
             }
         }
         if (count == 0) node.add(new DefaultMutableTreeNode("<null>"));
-        easyUI.messageBoxExt(this, "Resolved: "+count, "Resolve Section", eUI.MBIcon_INFORMATION);
+        easyUI.messageBoxExt(this, "Resolved: "+count, "Resolve Section", easyUI.MBIcon_INFORMATION);
     }
     
     public void jMenuItemSectionExtractAll() {
@@ -191,19 +191,19 @@ public class RelocationTree extends JTree implements TreeSelectionListener, Mous
         } catch (IOException e) {
             e.printStackTrace();
         }
-        eUI.messageBoxExt(this, "Data extracted successfuly!", "Done", easyUI.MBIcon_INFORMATION);
+        easyUI.messageBoxExt(this, "Data extracted successfuly!", "Done", easyUI.MBIcon_INFORMATION);
     }
     //</editor-fold>
     
     //<editor-fold defaultstate="collapsed" desc="[TREE] Popup Entry        - Items Event">
     public void jMenuItemEntryExtractFromSection() {
         //--- Get File
-        File out = eUI.getSaveFilename(new String[] {"Binary file"}, new String[] {".bin"});
+        File out = easyUI.getSaveFilename(new String[] {"Binary file"}, new String[] {".bin"});
         if (out == null) {
-            eUI.messageBoxExt(this, "File error!", "Failed to save file", easyUI.MBIcon_ERROR);
+            easyUI.messageBoxExt(this, "File error!", "Failed to save file", easyUI.MBIcon_ERROR);
             return;
         } else if (out.exists()) {
-            eUI.messageBoxExt(this, "File already exists!", "Failed to save file", easyUI.MBIcon_INFORMATION);
+            easyUI.messageBoxExt(this, "File already exists!", "Failed to save file", easyUI.MBIcon_INFORMATION);
             return;
         }
         
@@ -214,7 +214,7 @@ public class RelocationTree extends JTree implements TreeSelectionListener, Mous
         } catch (IOException e) {
             e.printStackTrace();
         }
-        eUI.messageBoxExt(this, "Data extracted successfuly!", "Done", easyUI.MBIcon_INFORMATION);
+        easyUI.messageBoxExt(this, "Data extracted successfuly!", "Done", easyUI.MBIcon_INFORMATION);
     }
     
     public void jMenuItemEntryExtractFromFile() {

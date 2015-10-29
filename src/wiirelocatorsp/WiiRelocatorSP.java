@@ -31,6 +31,7 @@ public class WiiRelocatorSP {
     
     public static void main(String[] args) {
         // DEBUG MAIN CLASS
+        
         /*
         File debugFileRso = new File("/home/spln/Bureau/Jeux & Emulation/Jeux/Wii/MHTri/Tree/01 (rso)/net_data.rso");
         File debugFileRsoRam = new File("/home/spln/Bureau/Jeux & Emulation/Jeux/Wii/MHTri/Tree/01 (rso)/net_data/ram.raw");

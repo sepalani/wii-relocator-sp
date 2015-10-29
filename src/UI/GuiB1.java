@@ -47,14 +47,24 @@ public class GuiB1 extends javax.swing.JFrame {
     private void initComponents() {
 
         jFrameToolsAddress = new javax.swing.JFrame();
-        jComboBoxToolsAddress = new javax.swing.JComboBox();
-        jTextFieldToolsAddress = new javax.swing.JTextField();
-        jLabelToolsAddress = new javax.swing.JLabel();
-        jButtonToolsAddressResolve = new javax.swing.JButton();
-        jLabelToolsAddressDef = new javax.swing.JLabel();
         jLabelToolsAddressRoffset = new javax.swing.JLabel();
         jTextFieldToolsAddressRoffset = new javax.swing.JTextField();
+        jLabelToolsAddressFrom = new javax.swing.JLabel();
+        jComboBoxToolsAddressFrom = new javax.swing.JComboBox();
+        jTextFieldToolsAddressFrom = new javax.swing.JTextField();
         jButtonToolsAddressGet = new javax.swing.JButton();
+        jSeparatorToolsAddress1 = new javax.swing.JSeparator();
+        jTextFieldToolsAddress = new javax.swing.JTextField();
+        jComboBoxToolsAddress = new javax.swing.JComboBox();
+        jButtonToolsAddressResolve = new javax.swing.JButton();
+        jLabelToolsAddressDef = new javax.swing.JLabel();
+        jLabelToolsAddress = new javax.swing.JLabel();
+        jLabelToolsAddressExtract = new javax.swing.JLabel();
+        jSeparatorToolsAddress2 = new javax.swing.JSeparator();
+        jRadioButtonToolsAddressExtractBinary = new javax.swing.JRadioButton();
+        jRadioButtonToolsAddressExtractObject = new javax.swing.JRadioButton();
+        jButtonToolsAddressExtract = new javax.swing.JButton();
+        buttonGroupToolsAddress = new javax.swing.ButtonGroup();
         jTabbedPaneMain = new javax.swing.JTabbedPane();
         jScrollPaneFile = new javax.swing.JScrollPane();
         jSplitPaneFile = new javax.swing.JSplitPane();
@@ -97,12 +107,33 @@ public class GuiB1 extends javax.swing.JFrame {
 
         jFrameToolsAddress.setTitle("Resolve address");
 
-        jComboBoxToolsAddress.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "R_PPC_NONE (0x00)", "R_PPC_ADDR32  (0x01)", "*R_PPC_ADDR24  (0x02)", "R_PPC_ADDR16  (0x03)", "R_PPC_ADDR16_LO (0x04)", "R_PPC_ADDR16_HI  (0x05)", "R_PPC_ADDR16_HA (0x06)", "*R_PPC_ADDR14  (0x07)", "*R_PPC_ADDR14  (0x08)", "*R_PPC_ADDR14  (0x09)", "R_PPC_REL24 (0x0A)", "*R_PPC_REL14 (0x0B)", "*R_PPC_REL14 (0x0C)", "*R_PPC_REL14 (0x0D)" }));
-        jComboBoxToolsAddress.setToolTipText("");
+        jLabelToolsAddressRoffset.setText("r_offset:  ");
+
+        jTextFieldToolsAddressRoffset.setText("Enter r_offset...");
+
+        jLabelToolsAddressFrom.setText("From:  ");
+
+        jComboBoxToolsAddressFrom.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "File", "MEM1", "MEM2", "Custom...", " " }));
+        jComboBoxToolsAddressFrom.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxToolsAddressFromActionPerformed(evt);
+            }
+        });
+
+        jTextFieldToolsAddressFrom.setText("address");
+        jTextFieldToolsAddressFrom.setEnabled(false);
+
+        jButtonToolsAddressGet.setText("Get relocated address");
+        jButtonToolsAddressGet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonToolsAddressGetActionPerformed(evt);
+            }
+        });
 
         jTextFieldToolsAddress.setText("Enter relocated address...");
 
-        jLabelToolsAddress.setText("Address:  0xXXXXXXXX");
+        jComboBoxToolsAddress.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "R_PPC_NONE (0x00)", "R_PPC_ADDR32  (0x01)", "*R_PPC_ADDR24  (0x02)", "R_PPC_ADDR16  (0x03)", "R_PPC_ADDR16_LO (0x04)", "R_PPC_ADDR16_HI  (0x05)", "R_PPC_ADDR16_HA (0x06)", "*R_PPC_ADDR14  (0x07)", "*R_PPC_ADDR14  (0x08)", "*R_PPC_ADDR14  (0x09)", "R_PPC_REL24 (0x0A)", "*R_PPC_REL14 (0x0B)", "*R_PPC_REL14 (0x0C)", "*R_PPC_REL14 (0x0D)" }));
+        jComboBoxToolsAddress.setToolTipText("");
 
         jButtonToolsAddressResolve.setText("Resolve");
         jButtonToolsAddressResolve.addActionListener(new java.awt.event.ActionListener() {
@@ -113,14 +144,21 @@ public class GuiB1 extends javax.swing.JFrame {
 
         jLabelToolsAddressDef.setText("*:  not supported relocation");
 
-        jLabelToolsAddressRoffset.setText("r_offset:  ");
+        jLabelToolsAddress.setText("Address:  0xXXXXXXXX");
 
-        jTextFieldToolsAddressRoffset.setText("Enter hex string...");
+        jLabelToolsAddressExtract.setText("Extract :");
 
-        jButtonToolsAddressGet.setText("Get symbol address");
-        jButtonToolsAddressGet.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroupToolsAddress.add(jRadioButtonToolsAddressExtractBinary);
+        jRadioButtonToolsAddressExtractBinary.setSelected(true);
+        jRadioButtonToolsAddressExtractBinary.setText("Binary");
+
+        buttonGroupToolsAddress.add(jRadioButtonToolsAddressExtractObject);
+        jRadioButtonToolsAddressExtractObject.setText("Object");
+
+        jButtonToolsAddressExtract.setText("Extract");
+        jButtonToolsAddressExtract.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonToolsAddressGetActionPerformed(evt);
+                jButtonToolsAddressExtractActionPerformed(evt);
             }
         });
 
@@ -128,21 +166,37 @@ public class GuiB1 extends javax.swing.JFrame {
         jFrameToolsAddress.getContentPane().setLayout(jFrameToolsAddressLayout);
         jFrameToolsAddressLayout.setHorizontalGroup(
             jFrameToolsAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSeparatorToolsAddress2)
+            .addComponent(jSeparatorToolsAddress1)
             .addGroup(jFrameToolsAddressLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jFrameToolsAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabelToolsAddress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jFrameToolsAddressLayout.createSequentialGroup()
                         .addComponent(jLabelToolsAddressRoffset)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldToolsAddressRoffset))
-                    .addComponent(jButtonToolsAddressGet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonToolsAddressGet, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonToolsAddressExtract, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTextFieldToolsAddress)
-                    .addComponent(jComboBoxToolsAddress, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jComboBoxToolsAddress, 0, 280, Short.MAX_VALUE)
+                    .addComponent(jButtonToolsAddressResolve, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabelToolsAddress, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jFrameToolsAddressLayout.createSequentialGroup()
-                        .addComponent(jLabelToolsAddressDef)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jButtonToolsAddressResolve, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jFrameToolsAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jFrameToolsAddressLayout.createSequentialGroup()
+                                .addComponent(jLabelToolsAddressExtract)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jRadioButtonToolsAddressExtractBinary)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jRadioButtonToolsAddressExtractObject))
+                            .addComponent(jLabelToolsAddressDef))
+                        .addGap(0, 55, Short.MAX_VALUE))
+                    .addGroup(jFrameToolsAddressLayout.createSequentialGroup()
+                        .addComponent(jLabelToolsAddressFrom)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jComboBoxToolsAddressFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextFieldToolsAddressFrom)))
                 .addContainerGap())
         );
         jFrameToolsAddressLayout.setVerticalGroup(
@@ -153,17 +207,33 @@ public class GuiB1 extends javax.swing.JFrame {
                     .addComponent(jLabelToolsAddressRoffset)
                     .addComponent(jTextFieldToolsAddressRoffset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jFrameToolsAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelToolsAddressFrom)
+                    .addComponent(jComboBoxToolsAddressFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldToolsAddressFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonToolsAddressGet)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparatorToolsAddress1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldToolsAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBoxToolsAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonToolsAddressResolve)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelToolsAddressDef)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelToolsAddress)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jSeparatorToolsAddress2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jFrameToolsAddressLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelToolsAddressExtract)
+                    .addComponent(jRadioButtonToolsAddressExtractBinary)
+                    .addComponent(jRadioButtonToolsAddressExtractObject))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonToolsAddressExtract)
                 .addContainerGap())
         );
 
@@ -414,7 +484,7 @@ public class GuiB1 extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPaneMain, javax.swing.GroupLayout.DEFAULT_SIZE, 331, Short.MAX_VALUE)
+                .addComponent(jTabbedPaneMain, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -494,15 +564,15 @@ public class GuiB1 extends javax.swing.JFrame {
 
     private void jMenuItemFileOpenAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemFileOpenAsActionPerformed
         // TODO add your handling code here:
-        String nb1 = eUI.getStringExt(this, "Enter RSO offset:", "Input", easyUI.MBIcon_INFORMATION);
-        String nb2 = eUI.getStringExt(this, "Addresses rectification:", "Input", easyUI.MBIcon_INFORMATION);
+        String nb1 = eUI.getStringExt(this, "Enter RSO offset:", "Input", easyUI.MBIcon_QUESTION);
+        String nb2 = eUI.getStringExt(this, "Addresses rectification:", "Input", easyUI.MBIcon_QUESTION);
         Long offset, dec;
         
         //--- Get input
         try {
-            offset = Long.parseLong(nb1);
-            dec    = Long.parseLong(nb2);
-        } catch (NumberFormatException e){
+            offset = easyUI.parseLong(nb1);
+            dec    = easyUI.parseLong(nb2);
+        } catch (NumberFormatException | NullPointerException e){
             eUI.messageBoxExt(this, "Isn't a valide number!", "Input error", easyUI.MBIcon_ERROR);
             e.printStackTrace();
             return;
@@ -572,7 +642,7 @@ public class GuiB1 extends javax.swing.JFrame {
 
     private void jMenuItemQAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemQAboutActionPerformed
         eUI.messageBox(this,String.format(
-                            "    Wii Relocator SP v0.2 %n %n"+
+                            "    Wii Relocator SP v0.3 %n %n"+
                             "    Copyright © 2013  SPLN (sepalani) %n"+
                             "    This program is free software: you can redistribute it and/or modify%n" +
                             "    it under the terms of the GNU General Public License as published by%n" +
@@ -601,7 +671,7 @@ public class GuiB1 extends javax.swing.JFrame {
         
         //--- Get input
         try {
-            offset = Long.parseLong(nb1);
+            offset = easyUI.parseLong(nb1);
         } catch (NumberFormatException e){
             eUI.messageBoxExt(this, "Isn't a valide number!", "Input error", easyUI.MBIcon_ERROR);
             e.printStackTrace();
@@ -633,8 +703,9 @@ public class GuiB1 extends javax.swing.JFrame {
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
-        
+        eUI.messageBoxExt(this, "Binary extracted successfuly!", "Done", easyUI.MBIcon_INFORMATION);
     }//GEN-LAST:event_jMenuItemToolsExtractBinaryActionPerformed
 
     private void jMenuItemToolsExtractObjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemToolsExtractObjectActionPerformed
@@ -648,7 +719,7 @@ public class GuiB1 extends javax.swing.JFrame {
         
         //--- Get input
         try {
-            offset = Long.parseLong(nb1);
+            offset = easyUI.parseLong(nb1);
         } catch (NumberFormatException e){
             eUI.messageBoxExt(this, "Isn't a valide number!", "Input error", easyUI.MBIcon_ERROR);
             e.printStackTrace();
@@ -680,21 +751,40 @@ public class GuiB1 extends javax.swing.JFrame {
             fos.close();
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
+        eUI.messageBoxExt(this, "Object extracted successfuly!", "Done", easyUI.MBIcon_INFORMATION);
     }//GEN-LAST:event_jMenuItemToolsExtractObjectActionPerformed
 
     private void jMenuItemToolsResolveAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemToolsResolveAddressActionPerformed
         // TODO add your handling code here:
         jFrameToolsAddress.setVisible(true);
+        jFrameToolsAddress.setSize(305, 350);
     }//GEN-LAST:event_jMenuItemToolsResolveAddressActionPerformed
-
+    //</editor-fold>
+    
     private void jButtonToolsAddressResolveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonToolsAddressResolveActionPerformed
         // TODO add your handling code here:
         int index = jComboBoxToolsAddress.getSelectedIndex();
-        long r_offset = Long.parseLong(jTextFieldToolsAddressRoffset.getText(),16);
-        long symb = Long.parseLong(jTextFieldToolsAddress.getText(),16);
+        long r_offset = -1, symb = -1;
+        try {
+            r_offset = easyUI.parseLong(jTextFieldToolsAddressRoffset.getText());
+            symb = easyUI.parseLong(jTextFieldToolsAddress.getText());
+        } catch (NumberFormatException e) {
+            easyUI.messageBoxExt(this, "Invalid r_offset/symbol address!", "Failed to resolve address", easyUI.MBIcon_ERROR);
+            e.printStackTrace();
+        }
+        
         long add = PowerPC.resolveAddress(symb, index, r_offset);
-        jLabelToolsAddress.setText(String.format("Address:  0x%08X", add));
+        if (add < 0) {
+            jLabelToolsAddress.setText(String.format("Address:  0xERROR", add));
+        } else if (add == 0x04) {
+            jLabelToolsAddress.setText(String.format("Address:  0x____%04X", add));
+        } else if (add == 0x05 || add == 0x06) {
+            jLabelToolsAddress.setText(String.format("Address:  0x%04X____", add));
+        } else {
+            jLabelToolsAddress.setText(String.format("Address:  0x%08X", add));
+        }
     }//GEN-LAST:event_jButtonToolsAddressResolveActionPerformed
 
     private void jButtonToolsAddressGetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonToolsAddressGetActionPerformed
@@ -703,17 +793,107 @@ public class GuiB1 extends javax.swing.JFrame {
             eUI.messageBoxExt(this, "File isn't loaded!", "Failed to read address", easyUI.MBIcon_ERROR);
             return;
         }
-        long offset = Long.parseLong(jTextFieldToolsAddressRoffset.getText(),16);
+        
+        long from, offset;
         try {
-            IO file = new IO(relFile.fileLocation,"r");
-            file.seek(offset);
-            offset = file.readUint32();
-            jTextFieldToolsAddress.setText(String.format("%08X", offset));
+            from    = 0;
+            offset  = easyUI.parseLong(jTextFieldToolsAddressRoffset.getText());
+            
+            switch (jComboBoxToolsAddressFrom.getSelectedIndex()) {
+                case 1:     // MEM1
+                    from = PowerPC.MEM1_OFFSET;
+                    break;
+                case 2:     // MEM2
+                    from = PowerPC.MEM2_OFFSET;
+                    break;
+                case 3:     // Custom
+                    from = easyUI.parseLong(jTextFieldToolsAddressFrom.getText());
+                    break;
+                default:    // File  
+                    break;
+            }
+            
+            offset = PowerPC.getRelocatedAddressFrom(offset, relFile.fileLocation, from);
+            jTextFieldToolsAddress.setText(String.format("0x%08X", offset));
+            
+        } catch (NumberFormatException e) {
+            easyUI.messageBoxExt(this, "Isn't a valide number!", "Input error", easyUI.MBIcon_ERROR);
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_jButtonToolsAddressGetActionPerformed
-    //</editor-fold>
+
+    private void jComboBoxToolsAddressFromActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxToolsAddressFromActionPerformed
+        // TODO add your handling code here:
+        if (jComboBoxToolsAddressFrom.getSelectedIndex() == 3) {
+            jTextFieldToolsAddressFrom.setEnabled(true);
+        } else {
+            jTextFieldToolsAddressFrom.setEnabled(false);
+        }
+    }//GEN-LAST:event_jComboBoxToolsAddressFromActionPerformed
+
+    private void jButtonToolsAddressExtractActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonToolsAddressExtractActionPerformed
+        //  Address rectification
+        long address = 0;
+        switch (jComboBoxToolsAddressFrom.getSelectedIndex()) {
+            case 1:     // MEM1
+                address -= PowerPC.MEM1_OFFSET;
+                break;
+            case 2:     // MEM2
+                address -= PowerPC.MEM2_OFFSET;
+                break;
+            case 3:     // Custom
+                address -= easyUI.parseLong(jTextFieldToolsAddressFrom.getText());
+                break;
+        default:    // File  
+                break;
+        }
+        
+        //  Get Address
+        try {
+            address += easyUI.parseLong(jLabelToolsAddress.getText().substring(8));
+        } catch (NumberFormatException e) {
+            easyUI.messageBoxExt(this, "Isn't a valide address!", "Input error", easyUI.MBIcon_ERROR);
+            e.printStackTrace();
+            return;
+        }
+        
+        //--- Get filename
+        File out = eUI.getSaveFilename(new String[] {"Binary file"}, new String[] {".bin"});
+        if (out == null) {
+            eUI.messageBoxExt(this, "File error!", "Failed to save file", easyUI.MBIcon_ERROR);
+            return;
+        } else if (out.exists()) {
+            eUI.messageBoxExt(this, "File already exists!", "Failed to save file", easyUI.MBIcon_INFORMATION);
+            return;
+        }
+        
+        //--- Get binary/object
+        FileOutputStream fos;
+        BufferedOutputStream bos;
+        try {
+            int[] buff;
+            if (jRadioButtonToolsAddressExtractObject.isSelected()) {
+                buff = PowerPC.extractObject(relFile.fileLocation, address);
+            } else {
+                buff = PowerPC.extractBinary(relFile.fileLocation, address);
+            }
+            fos = new FileOutputStream(out);
+            bos = new BufferedOutputStream(fos);
+            
+            for (int i = 0; i < buff.length; i++) {
+                bos.write(buff[i]);
+            }
+            bos.close();
+            fos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        eUI.messageBoxExt(this, "Data extracted successfuly!", "Done", easyUI.MBIcon_INFORMATION);
+    }//GEN-LAST:event_jButtonToolsAddressExtractActionPerformed
+    
     
     
     /**
@@ -747,14 +927,19 @@ public class GuiB1 extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroupToolsAddress;
+    private javax.swing.JButton jButtonToolsAddressExtract;
     private javax.swing.JButton jButtonToolsAddressGet;
     private javax.swing.JButton jButtonToolsAddressResolve;
     private javax.swing.JComboBox jComboBoxToolsAddress;
+    private javax.swing.JComboBox jComboBoxToolsAddressFrom;
     private javax.swing.JFrame jFrameToolsAddress;
     private javax.swing.JLabel jLabelFileProperties;
     private javax.swing.JLabel jLabelRelocationProperties;
     private javax.swing.JLabel jLabelToolsAddress;
     private javax.swing.JLabel jLabelToolsAddressDef;
+    private javax.swing.JLabel jLabelToolsAddressExtract;
+    private javax.swing.JLabel jLabelToolsAddressFrom;
     private javax.swing.JLabel jLabelToolsAddressRoffset;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu jMenuFile;
@@ -775,6 +960,8 @@ public class GuiB1 extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemToolsResolveAddress;
     private javax.swing.JMenu jMenuQ;
     private javax.swing.JMenu jMenuTools;
+    private javax.swing.JRadioButton jRadioButtonToolsAddressExtractBinary;
+    private javax.swing.JRadioButton jRadioButtonToolsAddressExtractObject;
     private javax.swing.JScrollPane jScrollPaneExternalsRelocation;
     private javax.swing.JScrollPane jScrollPaneFile;
     private javax.swing.JScrollPane jScrollPaneFileProperties;
@@ -787,6 +974,8 @@ public class GuiB1 extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparatorFile1;
     private javax.swing.JPopupMenu.Separator jSeparatorFile2;
     private javax.swing.JPopupMenu.Separator jSeparatorFile3;
+    private javax.swing.JSeparator jSeparatorToolsAddress1;
+    private javax.swing.JSeparator jSeparatorToolsAddress2;
     private javax.swing.JSplitPane jSplitPaneFile;
     private javax.swing.JSplitPane jSplitPaneFileRelocationTree;
     private javax.swing.JTabbedPane jTabbedPaneMain;
@@ -794,6 +983,7 @@ public class GuiB1 extends javax.swing.JFrame {
     private javax.swing.JTable jTableExternalsRelocation;
     private javax.swing.JTable jTableInternalsRelocation;
     private javax.swing.JTextField jTextFieldToolsAddress;
+    private javax.swing.JTextField jTextFieldToolsAddressFrom;
     private javax.swing.JTextField jTextFieldToolsAddressRoffset;
     // End of variables declaration//GEN-END:variables
     // Variables declaration

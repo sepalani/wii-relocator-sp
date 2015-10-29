@@ -100,6 +100,66 @@ public class Export extends RelocatedData {
         fos.close();
     }
     
+    public void extractFromFile(File in, File out, long from) throws IOException {
+        extractFromFile(in, out, from, 0);
+    }
+    
+    public void extractFromFile(File in, File out, long from, int relId) throws IOException {
+        System.out.println(String.format("[Type: 0x%02X]", relocationType[relId]));
+        //  Get relocated address
+        long r_add  = PowerPC.getRelocatedAddressFrom(r_offset[relId], in, from);
+        System.out.println(String.format("Relocated add: %08X", r_add));
+        
+        //  Resolve address
+        long offset = PowerPC.resolveAddressFrom(
+                r_add, (int) relocationType[relId], r_offset[relId], from);
+        System.out.println(String.format("Resolved add: %08X", offset));
+        
+        //  Partial address relocation
+        if (relocationType[relId] == 0x04 || relocationType[relId] == 0x05
+                || relocationType[relId] == 0x06) {
+            labelFind:
+            for (int i = 0; i < relocationType[relId]; i++) {
+                long r_offset_p = r_offset[i];
+                int r_type_p    = (int) relocationType[i];
+                System.out.println(String.format("[Type: 0x%02X]", r_type_p));
+                long address_p  = PowerPC.getRelocatedAddressFrom(r_offset_p, in, from);
+                
+                switch ((int) relocationType[relId]) {
+                    case 0x04:
+                        if (r_type_p == 0x05 || r_type_p == 0x06) {
+                            offset |= PowerPC.resolveAddressFrom(
+                                    address_p, r_type_p, r_offset_p, from) << 16;
+                            offset -= from;
+                            break labelFind;
+                        }
+                        break;
+                        
+                    case 0x05: case 0x06:
+                        if (r_type_p == 0x04) {
+                            offset <<= 16;
+                            offset |= PowerPC.resolveAddressFrom(
+                                    address_p, r_type_p, r_offset_p, from);
+                            offset -= from;
+                            break labelFind;
+                        }
+                        break;
+                }
+            } 
+        }
+        System.out.println(String.format("Resolved add P2: %08X", offset));
+        
+        //  Extract binary
+        int[] buff = PowerPC.extractBinary(in, offset);
+        FileOutputStream fos        = new FileOutputStream(out);
+        BufferedOutputStream bos    = new BufferedOutputStream(fos);
+        for (int i = 0; i < buff.length; i++) {
+            bos.write(buff[i]);
+        }
+        bos.close();
+        fos.close();
+    }
+    
     //--- Resolving methods
     public void getName(long nameOffset, File in) throws IOException {
         IO file = new IO(in, "r");

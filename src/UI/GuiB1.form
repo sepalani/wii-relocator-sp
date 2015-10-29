@@ -10,23 +10,42 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
+              <Component id="jSeparatorToolsAddress2" alignment="0" max="32767" attributes="0"/>
+              <Component id="jSeparatorToolsAddress1" alignment="0" max="32767" attributes="0"/>
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jLabelToolsAddress" alignment="0" max="32767" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="jLabelToolsAddressRoffset" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jTextFieldToolsAddressRoffset" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="jButtonToolsAddressGet" max="32767" attributes="0"/>
+                      <Component id="jButtonToolsAddressGet" alignment="1" max="32767" attributes="0"/>
+                      <Component id="jButtonToolsAddressExtract" alignment="0" max="32767" attributes="0"/>
                       <Component id="jTextFieldToolsAddress" max="32767" attributes="0"/>
-                      <Component id="jComboBoxToolsAddress" max="32767" attributes="0"/>
-                      <Group type="102" attributes="0">
-                          <Component id="jLabelToolsAddressDef" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="jComboBoxToolsAddress" pref="280" max="32767" attributes="0"/>
                       <Component id="jButtonToolsAddressResolve" max="32767" attributes="0"/>
+                      <Component id="jLabelToolsAddress" alignment="0" max="32767" attributes="0"/>
+                      <Group type="102" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="jLabelToolsAddressExtract" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jRadioButtonToolsAddressExtractBinary" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="jRadioButtonToolsAddressExtractObject" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="jLabelToolsAddressDef" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="0" pref="55" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Component id="jLabelToolsAddressFrom" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jComboBoxToolsAddressFrom" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jTextFieldToolsAddressFrom" max="32767" attributes="0"/>
+                      </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -41,23 +60,93 @@
                       <Component id="jTextFieldToolsAddressRoffset" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jLabelToolsAddressFrom" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jComboBoxToolsAddressFrom" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jTextFieldToolsAddressFrom" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="jButtonToolsAddressGet" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jSeparatorToolsAddress1" min="-2" pref="10" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jTextFieldToolsAddress" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jComboBoxToolsAddress" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jButtonToolsAddressResolve" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="14" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabelToolsAddressDef" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jLabelToolsAddress" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
+                  <Component id="jSeparatorToolsAddress2" min="-2" pref="10" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jLabelToolsAddressExtract" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jRadioButtonToolsAddressExtractBinary" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jRadioButtonToolsAddressExtractObject" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="jButtonToolsAddressExtract" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
+        <Component class="javax.swing.JLabel" name="jLabelToolsAddressRoffset">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="r_offset:  "/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jTextFieldToolsAddressRoffset">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Enter r_offset..."/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="jLabelToolsAddressFrom">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="From:  "/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JComboBox" name="jComboBoxToolsAddressFrom">
+          <Properties>
+            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+              <StringArray count="5">
+                <StringItem index="0" value="File"/>
+                <StringItem index="1" value="MEM1"/>
+                <StringItem index="2" value="MEM2"/>
+                <StringItem index="3" value="Custom..."/>
+                <StringItem index="4" value=" "/>
+              </StringArray>
+            </Property>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jComboBoxToolsAddressFromActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JTextField" name="jTextFieldToolsAddressFrom">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="address"/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonToolsAddressGet">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Get relocated address"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonToolsAddressGetActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JSeparator" name="jSeparatorToolsAddress1">
+        </Component>
+        <Component class="javax.swing.JTextField" name="jTextFieldToolsAddress">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Enter relocated address..."/>
+          </Properties>
+        </Component>
         <Component class="javax.swing.JComboBox" name="jComboBoxToolsAddress">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
@@ -81,16 +170,6 @@
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextFieldToolsAddress">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Enter relocated address..."/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabelToolsAddress">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Address:  0xXXXXXXXX"/>
-          </Properties>
-        </Component>
         <Component class="javax.swing.JButton" name="jButtonToolsAddressResolve">
           <Properties>
             <Property name="text" type="java.lang.String" value="Resolve"/>
@@ -104,26 +183,47 @@
             <Property name="text" type="java.lang.String" value="*:  not supported relocation"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabelToolsAddressRoffset">
+        <Component class="javax.swing.JLabel" name="jLabelToolsAddress">
           <Properties>
-            <Property name="text" type="java.lang.String" value="r_offset:  "/>
+            <Property name="text" type="java.lang.String" value="Address:  0xXXXXXXXX"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextFieldToolsAddressRoffset">
+        <Component class="javax.swing.JLabel" name="jLabelToolsAddressExtract">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Enter hex string..."/>
+            <Property name="text" type="java.lang.String" value="Extract :"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButtonToolsAddressGet">
+        <Component class="javax.swing.JSeparator" name="jSeparatorToolsAddress2">
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="jRadioButtonToolsAddressExtractBinary">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Get symbol address"/>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroupToolsAddress"/>
+            </Property>
+            <Property name="selected" type="boolean" value="true"/>
+            <Property name="text" type="java.lang.String" value="Binary"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JRadioButton" name="jRadioButtonToolsAddressExtractObject">
+          <Properties>
+            <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+              <ComponentRef name="buttonGroupToolsAddress"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Object"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JButton" name="jButtonToolsAddressExtract">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Extract"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonToolsAddressGetActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonToolsAddressExtractActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.ButtonGroup" name="buttonGroupToolsAddress">
+    </Component>
     <Menu class="javax.swing.JMenuBar" name="jMenuBar1">
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="jMenuFile">
@@ -316,7 +416,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jTabbedPaneMain" pref="331" max="32767" attributes="0"/>
+              <Component id="jTabbedPaneMain" pref="343" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
